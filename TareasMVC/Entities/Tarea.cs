@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace TareasMVC.Entities
 {
@@ -15,6 +16,13 @@ namespace TareasMVC.Entities
         public int Orden { get; set; }
 
         public DateTime FechaCreacion { get; set; }
+
+
+        public string UsuarioCreacionId { get; set; }
+
+        //Propiedad de Navegación
+        public IdentityUser UsuarioCreacion { get; set; }
+
 
         //Propiedad de Navegación
         public List<Paso> Pasos { get; set; } //Con esta propiedad obtenemos la data de la clase relacionada

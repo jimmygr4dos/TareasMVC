@@ -183,6 +183,7 @@ namespace TareasMVC.Controllers
         }
 
 
+        [Authorize(Roles = Constantes.RolAdmin)]
         [HttpGet]
         public async Task<IActionResult> Listado(string mensaje = null)
         {
@@ -197,6 +198,7 @@ namespace TareasMVC.Controllers
             return View(modelo);
         }
 
+        [Authorize(Roles = Constantes.RolAdmin)]
         [HttpPost]
         public async Task<IActionResult> HacerAdmin(string email)
         {
@@ -213,6 +215,7 @@ namespace TareasMVC.Controllers
                                     routeValues: new { mensaje = $"Rol asignado correctamente a {email}" });
         }
 
+        [Authorize(Roles = Constantes.RolAdmin)]
         [HttpPost]
         public async Task<IActionResult> RemoverAdmin(string email)
         {
