@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using TareasMVC;
+using TareasMVC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +20,12 @@ var politicaUsuariosAutenticados = new AuthorizationPolicyBuilder()
 builder.Services.AddControllersWithViews(options =>
 {
     options.Filters.Add(new AuthorizeFilter(politicaUsuariosAutenticados));
-});
+}).AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix) //Para cambiar el idioma en una Vista
+  .AddDataAnnotationsLocalization(options =>
+  {
+      //Aquí indicamos que la clase RecursoCompartido se instanciará como factory y podrá compartir sus .resx
+      options.DataAnnotationLocalizerProvider = (_, factory) => factory.Create(typeof(RecursoCompartido));
+  });
 
 builder.Services.AddDbContext<ApplicationDBContext>
                     (options => options.UseSqlServer("name=DefaultConnection"));
@@ -42,7 +51,23 @@ builder.Services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.Ap
     options.AccessDeniedPath = "/usuarios/login";
 });
 
+//Para Internacionalización con IStringLocalizer y los archivos de Recursos
+builder.Services.AddLocalization(options =>
+{
+    options.ResourcesPath = "Resources";
+});
+
 var app = builder.Build();
+
+//Para soportar diferentes idiomas
+//var culturasUISoportadas = new[] { "es", "en" };
+app.UseRequestLocalization(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture("es");
+    //options.SupportedUICultures = culturasUISoportadas.Select(cultura => new CultureInfo(cultura)).ToList();
+    options.SupportedUICultures = Constantes.CulturasUISoportadas
+                                                .Select(cultura => new CultureInfo(cultura.Value)).ToList();
+});
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
