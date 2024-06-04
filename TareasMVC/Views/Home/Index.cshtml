@@ -15,8 +15,19 @@
 <div id="contenedor-listado-tareas" class="text-center">
     <div id="reordenable" class="text-start" data-bind="foreach: tareas">
         <div name="tarea" class="border mb-2 p-2" style="cursor: pointer" data-bind="click: manejarClickTarea">
-            <div data-bind="text: titulo, hidden: esNuevo" class="fw-bold">
+            @* Titulo *@
+            <div data-bind="text: titulo, hidden: esNuevo" class="fw-bold"></div>
+
+            @* Se muestra si la tarea contiene pasos (pasostotal>0) *@
+            <div name="pasos-resumen" data-bind="visible: pasosTotal() > 0">
+                @* pasos realizados *@
+                <span data-bind="text: pasosRealizados"></span>/
+                @* pasos totales *@
+                <span data-bind="text: pasosTotal"></span>
+                @* porcentaje de pasos completados *@
+                <span data-bind="text: porcentajeCompletado"span>
             </div>
+
             <input type="text" 
                     name="titulo-tarea" 
                     autocomplete="off" 
@@ -66,12 +77,21 @@
             });
         }
 
-        function tareaElementoListadoViewModel({ id, titulo }) {
+        function tareaElementoListadoViewModel({ id, titulo, pasosTotal, pasosRealizados }) {
             var self = this;
             self.id = ko.observable(id);
             self.titulo = ko.observable(titulo);
+
+            self.pasosTotal = ko.observable(pasosTotal);
+            self.pasosRealizados = ko.observable(pasosRealizados);
+
             self.esNuevo = ko.pureComputed(function () {
                 return self.id() == 0;
+            });
+
+            self.porcentajeCompletado = ko.pureComputed(function () {
+                const calculo = Math.round(self.pasosRealizados() * 1.0 / self.pasosTotal() * 100);
+                return `(${calculo}%)`
             });
         }
 

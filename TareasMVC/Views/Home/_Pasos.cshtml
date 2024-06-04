@@ -3,14 +3,16 @@
     <i class="bi bi-plus"></i>
 </button>
 
-<div data-bind="foreach: pasos">
+<div id="reordenable-pasos" data-bind="foreach: pasos">
     <div class="mt-2">
         <div class="row">
             <div class="col-1">
                 <input type="checkbox" 
                        class="form-check-input" 
                        name="chbPaso" 
-                       data-bind="{checked: realizado}" 
+                       data-bind="checked: realizado, 
+                                  click: manejarClickCheckboxPaso,
+                                  attr:{ 'data-id': id }" 
                 />
             </div>
             <div class="col-11">
@@ -36,6 +38,11 @@
                             data-bind="{click: manejarCancelarPaso}"
                     >
                         Cancelar
+                    </button>
+                    <button class="btn btn-danger" 
+                            data-bind="{hidden: esNuevo, click: manejarClickBorrarPaso}"
+                    >
+                        Borrar
                     </button>
                 </div>
             </div>

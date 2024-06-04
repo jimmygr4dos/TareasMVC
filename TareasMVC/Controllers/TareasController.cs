@@ -31,11 +31,13 @@ namespace TareasMVC.Controllers
             var tareas = await _context.Tareas
                                  .Where(t => t.UsuarioCreacionId == usuarioId)
                                  .OrderBy(t => t.Orden)
+                                 //ProjectDTO me sirve para mapear una clase DTO
                                  //.Select(t => new TareaDTO
                                  //{
                                  //    Id = t.Id,
                                  //    Titulo = t.Titulo
                                  //})
+                                 //En el AutoMapperProfile se configuró Pasos Totales y Pasos Realizados
                                  .ProjectTo<TareaDTO>(_mapper.ConfigurationProvider)
                                  .ToListAsync();
             return tareas;
@@ -98,8 +100,8 @@ namespace TareasMVC.Controllers
         {
             var usuarioId = _servicioUsuarios.ObtenerUsuarioId();
             
-            //Include para incluir los Pasos de la Tarea
-            var tarea = await _context.Tareas.Include(t => t.Pasos)
+            //Include para incluir los Pasos de la Tarea y OrderBy para ordenarlos
+            var tarea = await _context.Tareas.Include(t => t.Pasos.OrderBy(p => p.Orden))
                                              .FirstOrDefaultAsync(t => t.Id == id && 
                                                                        t.UsuarioCreacionId == usuarioId);
 

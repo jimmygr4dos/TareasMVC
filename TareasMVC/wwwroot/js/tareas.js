@@ -175,7 +175,12 @@ function obtenerIndiceTareaEnEdicion() {
     return tareaListadoViewModel.tareas().findIndex(t => t.id() === tareaEditarViewModel.id);
 }
 
+function obtenerTareaEnEdicion() {
+    const indice = obtenerIndiceTareaEnEdicion();
+    return tareaListadoViewModel.tareas()[indice];
+}
 
+//Para reordenar las Tareas
 $(function () {
     $("#reordenable").sortable({
         axis: 'y',
