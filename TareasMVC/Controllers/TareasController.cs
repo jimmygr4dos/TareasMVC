@@ -93,5 +93,54 @@ namespace TareasMVC.Controllers
             return Ok();
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Tarea>> Get(int id)
+        {
+            var usuarioId = _servicioUsuarios.ObtenerUsuarioId();
+            var tarea = await _context.Tareas.FirstOrDefaultAsync(t => t.Id == id && 
+                                                                  t.UsuarioCreacionId == usuarioId);
+
+            if (tarea is null)
+            {
+                return NotFound();
+            }
+
+            return tarea;
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> EditarTarea(int id, [FromBody] TareaEditarDTO tareaEditarDTO)
+        {
+            var usuarioId = _servicioUsuarios.ObtenerUsuarioId();
+            var tarea = await _context.Tareas.FirstOrDefaultAsync(t => t.Id == id && 
+                                                                       t.UsuarioCreacionId == usuarioId);
+            if (tarea is null)
+            {
+                return NotFound();
+            }
+
+            tarea.Titulo = tareaEditarDTO.Titulo;
+            tarea.Descripcion = tareaEditarDTO.Descripcion;
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var usuarioId = _servicioUsuarios.ObtenerUsuarioId();
+            var tarea = await _context.Tareas.FirstOrDefaultAsync(t => t.Id == id &&
+                                                                       t.UsuarioCreacionId == usuarioId);
+            if (tarea is null)
+            {
+                return NotFound();
+            }
+
+            _context.Remove(tarea);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
     }
 }

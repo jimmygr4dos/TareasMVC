@@ -23,3 +23,21 @@ function mostrarMensajeError(mensaje) {
         text: mensaje
     });
 }
+
+function confirmarAccion({ callbackAceptar, callbackCancelar, titulo }) {
+    Swal.fire({
+        title: titulo || '¿Realmente desea eliminar?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí',
+        focusConfirm: true
+    }).then((resultado) => {
+        if (resultado.isConfirmed) {
+            callbackAceptar();
+        } else if (callbackCancelar) {
+            callbackCancelar();
+        }
+    });
+}
