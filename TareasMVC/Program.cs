@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using System.Text.Json.Serialization;
 using TareasMVC;
 using TareasMVC.Services;
 
@@ -25,6 +26,10 @@ builder.Services.AddControllersWithViews(options =>
   {
       //Aquí indicamos que la clase RecursoCompartido se instanciará como factory y podrá compartir sus .resx
       options.DataAnnotationLocalizerProvider = (_, factory) => factory.Create(typeof(RecursoCompartido));
+  }).AddJsonOptions(options =>
+  {
+      //Para ignorar las referencias cíclicas
+      options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
   });
 
 builder.Services.AddDbContext<ApplicationDBContext>
