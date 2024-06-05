@@ -102,6 +102,7 @@ namespace TareasMVC.Controllers
             
             //Include para incluir los Pasos de la Tarea y OrderBy para ordenarlos
             var tarea = await _context.Tareas.Include(t => t.Pasos.OrderBy(p => p.Orden))
+                                             .Include(t => t.ArchivosAdjuntos.OrderBy(a => a.Orden))
                                              .FirstOrDefaultAsync(t => t.Id == id && 
                                                                        t.UsuarioCreacionId == usuarioId);
 

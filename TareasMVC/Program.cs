@@ -65,6 +65,10 @@ builder.Services.AddLocalization(options =>
 builder.Services.AddTransient<IServicioUsuarios, ServicioUsuarios>();
 builder.Services.AddAutoMapper(typeof(Program));
 
+//Para almacenar los archivos local o en Azure
+//builder.Services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosLocal>();
+builder.Services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosAzure>();
+
 var app = builder.Build();
 
 //Para soportar diferentes idiomas

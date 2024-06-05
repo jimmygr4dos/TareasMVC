@@ -55,10 +55,12 @@
     <script src="~/js/utlidades.js" asp-append-version="true"></script>
     <script src="~/js/tareas.js" asp-append-version="true"></script>
     <script src="~/js/pasos.js" asp-append-version="true"></script>
+    <script src="~/js/archivos-adjuntos.js" asp-append-version="true"></script>
 
     <script>
         const urlTareas = "/api/tareas";
         const urlPasos = "/api/pasos";
+        const urlArchivos = '/api/archivos';
 
         const modalEditarTarea = document.getElementById('modal-editar-tarea');
         const modalEditarTareaBootstrap = new bootstrap.Modal(modalEditarTarea);
@@ -99,7 +101,8 @@
             id: 0,
             titulo: ko.observable(''),
             descripcion: ko.observable(''),
-            pasos: ko.observableArray([])
+            pasos: ko.observableArray([]),
+            archivosAdjuntos: ko.observableArray([])
         };
 
         const tareaListadoViewModel = new tareaListadoViewModelFn();
@@ -116,6 +119,16 @@
             self.esNuevo = ko.pureComputed(function () {
                 return self.id() == 0;
             });
+        }
+
+        function archivoAdjuntoViewModel({ id, titulo, publicado, modoEdicion, orden, url }) {
+            var self = this;
+            self.id = id;
+            self.titulo = ko.observable(titulo || '');
+            self.publicado = publicado;
+            self.modoEdicion = ko.observable(modoEdicion);
+            self.orden = orden;
+            self.url = url;
         }
 
         obtenerTareas();
