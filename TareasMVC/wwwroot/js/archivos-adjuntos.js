@@ -26,7 +26,7 @@ async function manejarSeleccionArchivoTarea(event) {
     }
 
     const json = await respuesta.json();
-    //console.log(json);
+
     prepararArchivosAdjuntos(json);
 
     inputArchivoTarea.value = null;
